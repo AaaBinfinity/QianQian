@@ -1,6 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="芊芊绿雪队项目"/>
+  <HelloWorld msg="芊芊绿雪队！"/>
 </template>
 
 <script>
