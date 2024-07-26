@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="芊芊绿雪队！"/>
+  <div id="app">
+    <AirQuality />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AirQuality from './components/AirQuality.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    AirQuality
   }
-}
+};
 </script>
 
 <style>
@@ -20,7 +21,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c4c6a;
+  color: #2c3e50;
   margin-top: 60px;
 }
 </style>
