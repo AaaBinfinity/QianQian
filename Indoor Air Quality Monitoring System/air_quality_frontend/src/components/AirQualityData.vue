@@ -161,7 +161,7 @@ export default {
   },
   mounted() {
     this.fetchData();
-    setInterval(this.fetchData, 5000); // 每5秒刷新一次数据
+    setInterval(this.fetchData, 1000);
   }
 };
 </script>
@@ -266,7 +266,7 @@ tbody tr:nth-child(odd) {
 }
 
 .delete-button:hover {
-  background-color: #c82333;
+  background-color: #e4293b;
 }
 
 .button-group {

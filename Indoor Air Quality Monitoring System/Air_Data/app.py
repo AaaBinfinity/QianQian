@@ -68,7 +68,7 @@ def insert_mock_data():
 def periodic_insertion():
     print("Inserting periodic data")
     insert_mock_data()
-    Timer(5.0, periodic_insertion).start()  # 每5秒插入一次数据
+    Timer(9.0, periodic_insertion).start()  # 每5秒插入一次数据
 
 
 # 启动 Flask 应用时创建表并开始定期插入数据
