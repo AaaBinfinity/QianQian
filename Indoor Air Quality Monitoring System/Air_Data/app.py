@@ -42,7 +42,7 @@ def create_table():
 
 # 插入模拟数据
 def insert_mock_data():
-    print("Inserting mock data")
+    print("Inserting mock data.......")
     connection = get_db_connection()
     cursor = connection.cursor()
 
@@ -81,7 +81,7 @@ def initialize():
 # 提供一个简单的 API 来查看数据
 @app.route('/api/airquality/data', methods=['GET'])
 def get_data():
-    print("Getting data")
+    print("Getting data........")
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     cursor.execute("SELECT * FROM IndoorAirQuality")
