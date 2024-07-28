@@ -1,17 +1,24 @@
-// src/components/AirQualityChart.vue
 <template>
-  <div class="chart-container">
-    <h1>室内空气质量监测折线图</h1>
-    <div ref="chart" class="chart"></div>
+  <div class="charts-container">
+    <h1>室内空气质量监测折线图 - 近1小时</h1>
+    <NavigationBar :currentView="'all'" @navigate="handleNavigate" />
+    <div class="chart-container">
+      <h1>室内空气质量监测折线图</h1>
+      <div ref="chart" class="chart"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts';
 import axios from 'axios';
+import NavigationBar from './NavigationBar.vue';
 
 export default {
-  name: 'AirQualityChart',
+  name: 'AirQualityChart1h',
+  components: {
+    NavigationBar
+  },
   data() {
     return {
       airQualityData: [],
@@ -82,6 +89,10 @@ export default {
       };
 
       chart.setOption(option);
+    },
+    handleNavigate(view) {
+      // Handle navigation logic here
+      console.log(`Navigating to ${view}`);
     }
   },
   mounted() {

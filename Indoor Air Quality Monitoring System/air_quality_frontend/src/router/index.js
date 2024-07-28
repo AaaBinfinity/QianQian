@@ -8,6 +8,7 @@ import AirQualityCharts1Mon from '@/components/AirQualityCharts1Mon.vue';
 import AirQualityCharts6Mon from '@/components/AirQualityCharts6Mon.vue';
 import AirQualityCharts1y from '@/components/AirQualityCharts1y.vue';
 import AirQualityChartsAll from '@/components/AirQualityChartsAll.vue';
+import AirQualityData from '@/components/AirQualityData.vue';
 
 
 const routes = [
@@ -19,6 +20,7 @@ const routes = [
     { path: '/6M', component: AirQualityCharts6Mon },
     { path: '/1y', component: AirQualityCharts1y },
     { path: '/all', component: AirQualityChartsAll },
+    { path: '/Data', component: AirQualityData },
     { path: '/', redirect: '/1m' }
 ];
 

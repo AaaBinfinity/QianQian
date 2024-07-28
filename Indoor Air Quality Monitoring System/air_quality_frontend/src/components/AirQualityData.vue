@@ -1,7 +1,7 @@
 <template>
   <h1>室内空气质量监测</h1>
+  <NavigationBar :currentView="'all'" @navigate="handleNavigate" />
   <div class="container">
-
     <form @submit.prevent="createData" class="data-form">
       <div class="form-row">
         <div class="form-group">
@@ -35,6 +35,21 @@
       </div>
       <button type="submit" class="submit-button">添加数据</button>
     </form>
+
+    <div class="filter-form">
+      <h2>筛选数据</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>开始时间:</label>
+          <input v-model="filter.startTime" type="datetime-local" />
+        </div>
+        <div class="form-group">
+          <label>结束时间:</label>
+          <input v-model="filter.endTime" type="datetime-local" />
+        </div>
+      </div>
+    </div>
+
     <table>
       <thead>
       <tr>
@@ -48,7 +63,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="data in airQualityData" :key="data.id">
+      <tr v-for="data in paginatedAirQualityData" :key="data.id">
         <td>{{ data.timestamp }}</td>
         <td>{{ data.co2_concentration }}</td>
         <td>{{ data.pm25_concentration }}</td>
@@ -61,6 +76,13 @@
       </tr>
       </tbody>
     </table>
+
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
+    </div>
+
     <div class="button-group">
       <button @click="saveDataToFile" class="action-button">保存数据到文件</button>
       <button @click="printData" class="action-button">打印数据</button>
@@ -71,8 +93,10 @@
 <script>
 import axios from 'axios';
 import { saveAs } from 'file-saver';
+import NavigationBar from "@/components/NavigationBar.vue";
 
 export default {
+  components: { NavigationBar },
   data() {
     return {
       airQualityData: [],
@@ -83,8 +107,34 @@ export default {
         formaldehyde_concentration: '',
         temperature: '',
         humidity: ''
-      }
+      },
+      filter: {
+        startTime: '',
+        endTime: ''
+      },
+      currentPage: 1,
+      itemsPerPage: 20
     };
+  },
+  computed: {
+    filteredAirQualityData() {
+      const { startTime, endTime } = this.filter;
+      if (startTime && endTime) {
+        return this.airQualityData.filter(data => {
+          const timestamp = new Date(data.timestamp).getTime();
+          return timestamp >= new Date(startTime).getTime() && timestamp <= new Date(endTime).getTime();
+        });
+      }
+      return this.airQualityData;
+    },
+    paginatedAirQualityData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = this.currentPage * this.itemsPerPage;
+      return this.filteredAirQualityData.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredAirQualityData.length / this.itemsPerPage);
+    }
   },
   methods: {
     fetchData() {
@@ -141,7 +191,7 @@ export default {
             </tr>
           </thead>
           <tbody>
-            ${this.airQualityData.map(data => `
+            ${this.filteredAirQualityData.map(data => `
               <tr>
                 <td>${data.timestamp}</td>
                 <td>${data.co2_concentration}</td>
@@ -157,6 +207,16 @@ export default {
       printWindow.document.write(printContent.innerHTML);
       printWindow.document.close();
       printWindow.print();
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
     }
   },
   mounted() {
@@ -182,12 +242,22 @@ h1 {
   margin-bottom: 20px;
 }
 
-.data-form {
+.data-form, .filter-form {
   background-color: #e6f7ff;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-form {
+  margin-top: 20px;
+}
+
+h2 {
+  color: #4682b4;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .form-row {
@@ -286,5 +356,35 @@ tbody tr:nth-child(odd) {
 
 .action-button:hover {
   background-color: #31b0d5;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pagination button {
+  background-color: #5bc0de;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #31b0d5;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  margin: 0 10px;
 }
 </style>
