@@ -1,3 +1,23 @@
+
+'''
+mysql+pymysql://root:Cb050328@localhost:3306/airqualitydb
+  CREATE TABLE IF NOT EXISTS airqualitydata_cleaned (
+        id INT AUTO_INCREMENT PRIMARY KEY,  -- 自增主键
+        timestamp DATETIME NOT NULL,        -- 时间戳
+        co2_concentration FLOAT NOT NULL,   -- CO2浓度
+        pm25_concentration FLOAT NOT NULL,  -- PM2.5浓度
+        formaldehyde_concentration FLOAT NOT NULL,  -- 甲醛浓度
+        temperature FLOAT NOT NULL,         -- 温度
+        humidity FLOAT NOT NULL             -- 湿度
+    );
+
+以上数据库的表每10秒会添加一条最新数据，我需要创建一个新的表airqualitydata_1min，用来储存每分钟的，每个指标的平均值
+我需要创建一个新的表airqualitydata_1h，用来储存每小时的，每个指标的平均值
+我需要创建一个新的表airqualitydata_1day，用来储存每天的，每个指标的平均值
+
+给我写一个脚本，用来实现计算并插入数据
+'''
+
 from sqlalchemy import create_engine, text
 import pandas as pd
 import schedule
