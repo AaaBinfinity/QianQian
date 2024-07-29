@@ -1,6 +1,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import AirQualityCharts1m from '@/components/AirQualityCharts1m.vue';
+import AirQualityCharts1m from '@/components/AirQualityCharts1Mon.vue';
 import AirQualityCharts1h from '@/components/AirQualityCharts1h.vue';
 import AirQualityCharts1d from '@/components/AirQualityCharts1d.vue';
 import AirQualityCharts1w from '@/components/AirQualityCharts1w.vue';
