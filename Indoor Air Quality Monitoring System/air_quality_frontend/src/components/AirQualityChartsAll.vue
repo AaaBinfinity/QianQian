@@ -91,7 +91,6 @@ export default {
       chart.setOption(option);
     },
     handleNavigate(view) {
-      // Handle navigation logic here
       console.log(`Navigating to ${view}`);
     }
   },
