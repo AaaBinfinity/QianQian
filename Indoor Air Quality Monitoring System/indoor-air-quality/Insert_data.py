@@ -17,21 +17,9 @@ db_config = {
 conn = pymysql.connect(**db_config)
 cursor = conn.cursor()
 
-# 创建表的 SQL 语句
-create_table_sql = """
-CREATE TABLE IF NOT EXISTS airqualitydata (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    timestamp DATETIME NOT NULL,
-    co2_concentration FLOAT NOT NULL,
-    pm25_concentration FLOAT NOT NULL,
-    formaldehyde_concentration FLOAT NOT NULL,
-    temperature FLOAT NOT NULL,
-    humidity FLOAT NOT NULL
-)
-"""
 
 # 执行创建表的 SQL 语句
-cursor.execute(create_table_sql)
+
 conn.commit()
 
 try:

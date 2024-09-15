@@ -16,55 +16,6 @@ db_config = {
     'cursorclass': pymysql.cursors.DictCursor
 }
 
-# 创建表的函数
-def create_tables():
-    logging.info('创建表格如果不存在。')
-    connection = pymysql.connect(**db_config)
-    try:
-        with connection.cursor() as cursor:
-            # 创建 airqualitydata_1min 表
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS airqualitydata_1min (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    timestamp DATETIME NOT NULL UNIQUE,
-                    avg_co2 FLOAT NOT NULL,
-                    avg_pm25 FLOAT NOT NULL,
-                    avg_formaldehyde FLOAT NOT NULL,
-                    avg_temperature FLOAT NOT NULL,
-                    avg_humidity FLOAT NOT NULL
-                );
-            ''')
-            logging.info('创建表格 airqualitydata_1min。')
-            # 创建 airqualitydata_1h 表
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS airqualitydata_1h (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    timestamp DATETIME NOT NULL UNIQUE,
-                    avg_co2 FLOAT NOT NULL,
-                    avg_pm25 FLOAT NOT NULL,
-                    avg_formaldehyde FLOAT NOT NULL,
-                    avg_temperature FLOAT NOT NULL,
-                    avg_humidity FLOAT NOT NULL
-                );
-            ''')
-            logging.info('创建表格 airqualitydata_1h。')
-            # 创建 airqualitydata_1day 表
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS airqualitydata_1day (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    timestamp DATETIME NOT NULL UNIQUE,
-                    avg_co2 FLOAT NOT NULL,
-                    avg_pm25 FLOAT NOT NULL,
-                    avg_formaldehyde FLOAT NOT NULL,
-                    avg_temperature FLOAT NOT NULL,
-                    avg_humidity FLOAT NOT NULL
-                );
-            ''')
-            logging.info('创建表格 airqualitydata_1day。')
-        connection.commit()
-    finally:
-        connection.close()
-
 # 计算并插入每分钟平均值的函数
 def calculate_minutely_averages():
     logging.info('计算每分钟的平均值。')
@@ -203,7 +154,7 @@ def setup_scheduled_tasks():
         time.sleep(1)
 
 if __name__ == "__main__":
-    create_tables()
+
     # 先处理历史数据
     calculate_minutely_averages()
     calculate_hourly_averages()
