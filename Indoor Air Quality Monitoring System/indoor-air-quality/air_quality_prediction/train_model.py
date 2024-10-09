@@ -7,9 +7,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
-
-print()
-
 # 连接数据库并读取数据
 def fetch_data(table_name):
     engine = create_engine('mysql+mysqlconnector://root:Cb050328@localhost/airqualitydb')
