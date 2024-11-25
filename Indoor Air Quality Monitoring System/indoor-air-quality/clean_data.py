@@ -1,22 +1,4 @@
 
-'''
-mysql+pymysql://root:Cb050328@localhost:3306/airqualitydb
-  CREATE TABLE IF NOT EXISTS airqualitydata_cleaned (
-        id INT AUTO_INCREMENT PRIMARY KEY,  -- 自增主键
-        timestamp DATETIME NOT NULL,        -- 时间戳
-        co2_concentration FLOAT NOT NULL,   -- CO2浓度
-        pm25_concentration FLOAT NOT NULL,  -- PM2.5浓度
-        formaldehyde_concentration FLOAT NOT NULL,  -- 甲醛浓度
-        temperature FLOAT NOT NULL,         -- 温度
-        humidity FLOAT NOT NULL             -- 湿度
-    );
-
-以上数据库的表每10秒会添加一条最新数据，我需要创建一个新的表airqualitydata_1min，用来储存每分钟的，每个指标的平均值
-我需要创建一个新的表airqualitydata_1h，用来储存每小时的，每个指标的平均值
-我需要创建一个新的表airqualitydata_1day，用来储存每天的，每个指标的平均值
-
-给我写一个脚本，用来实现计算并插入数据
-'''
 
 from sqlalchemy import create_engine, text
 import pandas as pd
@@ -25,39 +7,6 @@ import time
 
 # 数据库连接设置
 engine = create_engine('mysql+pymysql://root:Cb050328@localhost:3306/airqualitydb')
-
-# 创建表的SQL语句
-create_table_queries = [
-    '''
-    CREATE TABLE IF NOT EXISTS airqualitydata (
-        id INT AUTO_INCREMENT PRIMARY KEY,  -- 自增主键
-        timestamp DATETIME NOT NULL,        -- 时间戳
-        co2_concentration FLOAT NOT NULL,   -- CO2浓度
-        pm25_concentration FLOAT NOT NULL,  -- PM2.5浓度
-        formaldehyde_concentration FLOAT NOT NULL,  -- 甲醛浓度
-        temperature FLOAT NOT NULL,         -- 温度
-        humidity FLOAT NOT NULL             -- 湿度
-    );
-    ''',
-    '''
-    CREATE TABLE IF NOT EXISTS airqualitydata_cleaned (
-        id INT AUTO_INCREMENT PRIMARY KEY,  -- 自增主键
-        timestamp DATETIME NOT NULL,        -- 时间戳
-        co2_concentration FLOAT NOT NULL,   -- CO2浓度
-        pm25_concentration FLOAT NOT NULL,  -- PM2.5浓度
-        formaldehyde_concentration FLOAT NOT NULL,  -- 甲醛浓度
-        temperature FLOAT NOT NULL,         -- 温度
-        humidity FLOAT NOT NULL             -- 湿度
-    );
-    '''
-]
-
-# 执行SQL语句创建表
-with engine.connect() as conn:
-    for query in create_table_queries:
-        conn.execute(text(query))  # 执行每个创建表的SQL语句
-
-print("表创建完成。")
 
 
 # 定义预处理函数
@@ -83,8 +32,6 @@ def preprocess_data(df):
 
     return df
 
-
-# 定义实时数据处理任务
 def process_real_time_data():
     try:
         # 读取原始数据
@@ -104,11 +51,16 @@ def process_real_time_data():
                 # 预处理数据
                 df_cleaned = preprocess_data(df)  # 预处理数据
 
+                # 打印预处理后的数据
+                print("预处理后的数据:")
+                print(df_cleaned)
+
                 # 插入预处理后的数据
                 with engine.connect() as conn:
                     df_cleaned.to_sql('airqualitydata_cleaned', conn, if_exists='append', index=False)  # 将数据插入到清理后的表中
 
-                print("数据预处理和插入到 'airqualitydata_cleaned' 表完成。")
+
+
             else:
                 print("数据时间戳已存在，无需插入。")
     except Exception as e:

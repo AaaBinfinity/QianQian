@@ -13,60 +13,47 @@ db_config = {
     'cursorclass': pymysql.cursors.DictCursor
 }
 
-# 连接到数据库
+# 连接数据库
 conn = pymysql.connect(**db_config)
 cursor = conn.cursor()
 
-# 创建表的 SQL 语句
-create_table_sql = """
-CREATE TABLE IF NOT EXISTS airqualitydata (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    timestamp DATETIME NOT NULL,
-    co2_concentration FLOAT NOT NULL,
-    pm25_concentration FLOAT NOT NULL,
-    formaldehyde_concentration FLOAT NOT NULL,
-    temperature FLOAT NOT NULL,
-    humidity FLOAT NOT NULL
-)
-"""
-
-# 执行创建表的 SQL 语句
-cursor.execute(create_table_sql)
+# 提交事务
 conn.commit()
 
 try:
     while True:
-        # 生成当前时间
+        # 获取当前时间
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # 模拟生成数据
-        co2_concentration = round(random.uniform(300, 1000), 2)  # CO₂ 浓度
-        pm25_concentration = round(random.uniform(10, 150), 2)  # PM2.5 浓度
-        formaldehyde_concentration = round(random.uniform(0.01, 0.20), 2)  # 甲醛浓度
-        temperature = round(random.uniform(15, 30), 2)  # 温度
-        humidity = round(random.uniform(20, 80), 2)  # 湿度
+        # 生成随机数据
+        co2_concentration = round(random.uniform(300, 350), 2)  # CO₂ 浓度
+        pm25_concentration = round(random.uniform(10, 15), 2)  # PM2.5 浓度
+        formaldehyde_concentration = round(random.uniform(0.05, 0.07), 2)  # 甲醛浓度
+        temperature = round(random.uniform(15, 17), 2)  # 温度
+        humidity = round(random.uniform(20, 25), 2)  # 湿度
 
-        # 插入数据的 SQL 语句
+        # 打印将要插入的数据
+        print(f"将要插入的数据: 时间={timestamp}, CO₂浓度={co2_concentration}, PM2.5浓度={pm25_concentration}, 甲醛浓度={formaldehyde_concentration}, 温度={temperature}, 湿度={humidity}")
+
+        # 插入数据
         insert_data_sql = """
             INSERT INTO airqualitydata (timestamp, co2_concentration, pm25_concentration, formaldehyde_concentration, temperature, humidity)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
 
-        # 执行 SQL 语句，插入数据
         cursor.execute(insert_data_sql, (
         timestamp, co2_concentration, pm25_concentration, formaldehyde_concentration, temperature, humidity))
 
         # 提交事务
         conn.commit()
 
-        # 输出插入的数据
-        print(
-            f"插入数据: 时间={timestamp}, CO₂浓度={co2_concentration}, PM2.5浓度={pm25_concentration}, 甲醛浓度={formaldehyde_concentration}, 温度={temperature}, 湿度={humidity}")
+        # 打印插入成功的信息
+        print(f"插入数据成功: 时间={timestamp}, CO₂浓度={co2_concentration}, PM2.5浓度={pm25_concentration}, 甲醛浓度={formaldehyde_concentration}, 温度={temperature}, 湿度={humidity}")
 
-        # 等待 10 秒
+        # 暂停10秒
         time.sleep(10)
 
 finally:
-    # 关闭数据库连接
+    # 关闭游标和连接
     cursor.close()
     conn.close()

@@ -241,7 +241,7 @@ export default {
   },
   mounted() {
     this.fetchData(); // 组件挂载时获取数据
-    setInterval(this.fetchData, 10000); // 每9秒获取一次数据
+    setInterval(this.fetchData, 10000); // 每10秒请求一次数据
   }
 };
 </script>

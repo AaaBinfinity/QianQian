@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空气质量预测展示</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .chart-container {
+            width: 80%;
+            height: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>空气质量预测展示</h1>
+
+    <div class="chart-container" id="hourlyChart"></div>
+
+    <script>
+        // 获取每小时预测数据
+        async function fetchHourlyData() {
+            try {
+                const response = await axios.get('http://localhost:5000/predict/h');
+                console.log("每小时预测数据:", response.data);  // 打印返回数据
+                return response.data;
+            } catch (error) {
+                console.error("每小时数据加载失败:", error);
+                return [];
+            }
+        }
+
+        // 渲染图表
+        function renderChart(containerId, title, data) {
+            if (!data || data.length === 0) {
+                console.log("没有数据可供渲染");  // 如果没有数据，打印提示
+                return;
+            }
+            const chart = echarts.init(document.getElementById(containerId));
+            const option = {
+                title: {
+                    text: title
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: data.map(item => item.timestamp)
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: 'CO2',
+                        type: 'line',
+                        data: data.map(item => item.avg_co2),
+                        markLine: {
+                            data: [{ type: 'dashed', name: '预测线' }]
+                        }
+                    },
+                    {
+                        name: 'PM2.5',
+                        type: 'line',
+                        data: data.map(item => item.avg_pm25),
+                        markLine: {
+                            data: [{ type: 'dashed', name: '预测线' }]
+                        }
+                    }
+                ]
+            };
+            chart.setOption(option);
+        }
+
+        // 主函数：获取数据并渲染图表
+        async function main() {
+            const hourlyData = await fetchHourlyData();
+
+            if (hourlyData.length > 0) {
+                renderChart('hourlyChart', '每小时预测数据', hourlyData);
+            } else {
+                console.log("没有获取到有效的每小时数据");
+            }
+        }
+
+        // 页面加载完成后执行
+        window.onload = main;
+    </script>
+</body>
+</html>
