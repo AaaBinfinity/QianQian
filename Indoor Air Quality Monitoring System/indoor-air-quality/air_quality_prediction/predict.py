@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 from flask import Flask, jsonify
+<<<<<<< HEAD
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -19,6 +20,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 #
 app = Flask(__name__)
+=======
+from datetime import datetime
+
+app = Flask(__name__)
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 
 # 连接数据库并读取数据
 def fetch_data(table_name, n_rows):
@@ -27,6 +33,7 @@ def fetch_data(table_name, n_rows):
     df = pd.read_sql(query, engine)
     df = df.sort_values(by='timestamp')  # 按时间升序排序
     return df
+<<<<<<< HEAD
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({"错误": "未找到该路径"}), 404
@@ -35,6 +42,8 @@ from flask import render_template
 @app.route('/')
 def index():
     return render_template('index.html')
+=======
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 
 # 数据预处理
 def preprocess_data(df, scaler=None):
@@ -48,8 +57,12 @@ def preprocess_data(df, scaler=None):
     else:
         scaled_data = scaler.transform(df)
 
+<<<<<<< HEAD
     return scaled_data, scaler  
 
+=======
+    return scaled_data, scaler
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 
 # 创建时间序列
 def create_sequences(data, seq_length):

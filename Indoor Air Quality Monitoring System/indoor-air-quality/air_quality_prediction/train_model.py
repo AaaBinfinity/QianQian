@@ -1,8 +1,12 @@
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
+<<<<<<< HEAD
 from tensorflow.keras.models import Sequential
 
+=======
+from YBJw.keras.models import Sequential
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -36,7 +40,11 @@ def create_sequences(data, seq_length):
     for i in range(len(data) - seq_length):
         x.append(data[i:i + seq_length])
         y.append(data[i + seq_length])
+<<<<<<< HEAD
     # print(f"创建的序列数量: {len(x)}")
+=======
+    print(f"创建的序列数量: {len(x)}")
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
     return np.array(x), np.array(y)
 
 
@@ -48,7 +56,11 @@ def train_model(x_train, y_train, x_test, y_test, model_name):
     model.add(Dense(y_train.shape[1]))
     model.compile(optimizer='adam', loss='mean_squared_error')
 
+<<<<<<< HEAD
     model.fit(x_train, y_train, epochs=200, batch_size=32, validation_split=0.1)
+=======
+    model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.1)
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 
     # 保存模型
     model.save(model_name)
@@ -73,7 +85,11 @@ def main():
 
         # 检查数据量
         if df.shape[0] <= 5:  # 序列长度
+<<<<<<< HEAD
             # print(f"{table_name} 数据量不足，无法创建序列。跳过。")
+=======
+            print(f"{table_name} 数据量不足，无法创建序列。跳过。")
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
             continue
 
         # 预处理数据

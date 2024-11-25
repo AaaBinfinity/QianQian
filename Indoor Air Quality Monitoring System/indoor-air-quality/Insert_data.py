@@ -17,7 +17,13 @@ db_config = {
 conn = pymysql.connect(**db_config)
 cursor = conn.cursor()
 
+<<<<<<< HEAD
 # 提交事务
+=======
+
+# 执行创建表的 SQL 语句
+
+>>>>>>> d8e037a36c2edf6ebad5baaeb702287f73112dd6
 conn.commit()
 
 try:
